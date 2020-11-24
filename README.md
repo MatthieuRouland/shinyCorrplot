@@ -6,7 +6,7 @@ This [Shiny](http://shiny.rstudio.com/) application aims to provide an interacti
 ## Overview
 
 ### Data Input
-Currently we provide a list of built-in datasets sourced from various R packages. You can also upload your own in any delimited flat file format.
+This adapted version of Shiny Corrplot correlation matrix by Matthieu Rouland allow the usage of .xlsx excel files. 
 
 ### Variable Selection
 You can use checkboxes to pick only the variables you want to see. Furthremore, you can drag variables around to manually reorder the columns. This will have an obvious impact if you choose to see correlation in their original order. However it can also affect some reordering algorithms such as AOE.

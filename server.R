@@ -1,13 +1,7 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 library(corrplot)
 library(ggplot2)
+library(readxl)
 source("corTest.R", local = TRUE)
 
 shinyServer(function(input, output, session) {
@@ -22,12 +16,13 @@ shinyServer(function(input, output, session) {
         NULL
       } else {
         #TODO: Better way to unescape e.g. \\t
-        read.delim(inFile$datapath, sep = gsub("\\t", "\t", input$datafile_sep, fixed = TRUE))
+       read_excel(inFile$datapath)
       }
     } else {
       eval(parse(text = datasource))
     }
   })
+  
   
   numericColumns <- reactive({
     df <- dataset()
@@ -75,7 +70,8 @@ shinyServer(function(input, output, session) {
   observe({
     updateSelectInput(session, "variables", selected = input$variablesCheckbox)
   })
-  
+
+    
   output$warning <- renderUI({
     val <- correlation()
     if(is.null(val)) {
@@ -85,15 +81,19 @@ shinyServer(function(input, output, session) {
       if(sum(isNA)) {
       tags$div(
         tags$h4("Warning: The following pairs in calculated correlation have been converted to zero because they produced NAs!"),
-        helpText("Consider using an approriate NA Action to exclude missing data"),
+        # helpText("Consider using an approriate NA Action to exclude missing data"),
         renderTable(expand.grid(attr(val, "dimnames"))[isNA,]))
       }
     }
   })
   
   ## Correlation Plot ####################################
-
-  output$corrPlot <- renderPlot({
+  # corrPlotReactive <- reactive({
+  output$corrPlot <- renderPlot({ 
+    #TODO: add color input to select differnts colorampalette
+    col2 <- colorRampPalette(c( "#053061"    , "#2166AC" ,  "#4393C3"    , "#92C5DE",   "#D1E5F0", 
+                                "#FFFFFF",  "#FDDBC7","#F4A582" , "#D6604D" ,"#B2182B",  "#67001F"))
+    
     val <- correlation()
     if(is.null(val)) return(NULL)
 
@@ -103,9 +103,20 @@ shinyServer(function(input, output, session) {
                  hclust.method = input$plotHclustMethod, 
                  addrect = input$plotHclustAddrect,
                  
+                 # cl.cex= input$choosenheight,
+                 col = col2(100),
+                 tl.col = "black", 
+                 outline = "black",
+                 pch.col = "black",
+                 
                  p.mat = sigConfMat()[[1]],
-                 sig.level = if(input$sigTest) input$sigLevel else NULL,
+                 # sig.level = if(input$sigTest) input$sigLevel else NULL,
+                 sig.level = if(input$sigTest) c(.001, .01, .05) else NULL,
+                 
                  insig = if(input$sigTest) input$sigAction else NULL,
+                
+                 pch.cex = 1, 
+                 tl.cex = 1,
                  
                  lowCI.mat = sigConfMat()[[2]],
                  uppCI.mat = sigConfMat()[[3]],
@@ -120,10 +131,29 @@ shinyServer(function(input, output, session) {
     } else {
       do.call(corrplot, c(list(method = input$plotMethod, type = input$plotType), args))
     }
-  })
+   })
+  # })
   
+  output$sizedcorrplot <- renderUI({
+    plotOutput("corrPlot", height = as.numeric(input$sliderSize))
+  }
+  )
+  ### Report PDF Graph
+  # output$report <- downloadHandler(
+  #   filename = function () {("Myplot.png")},
+  #   content = function(file) {
+  #     png(file)
+  #     print(
+  #       uiOutput("corrPlot")
+  #       )
+  #     dev.off()
+  #     }
+  # )
   ## Data Table ####################
   
   output$dataTable <- renderDataTable(dataset())
-
+  # output$ndataTable <- renderDataTable(ndatacor())
+  
+  
+  
 })
