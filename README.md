@@ -20,7 +20,7 @@ The `cor` function in `stats` package is used thus you have the freedom to choos
 We have include abilities to generate most examples in [corrplot vignette](http://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html). In particular, you can make [statstical inference](http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient#Inference) on correlation significance and/or confidence intervals.
 
 ## Credits
-Thanks goes to [corrplot](http://cran.r-project.org/web/packages/corrplot) and [sortList example](https://gist.github.com/trestletech/9691459) for inspiration, and [Developing Data Products](https://class.coursera.org/devdataprod-005) on Coursera for motivation and this great opportunity.
+Big thanks to Saurfang who made the first version of this wonderfull shiny app. As following to the first release of the app by Saurfang, thanks goes to [corrplot](http://cran.r-project.org/web/packages/corrplot) and [sortList example](https://gist.github.com/trestletech/9691459) for inspiration, and [Developing Data Products](https://class.coursera.org/devdataprod-005) on Coursera for motivation and this great opportunity.
 
 ## LICENSE
 MIT
