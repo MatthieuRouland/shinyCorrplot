@@ -84,6 +84,12 @@ shinyUI(fluidPage(
 
                         uiOutput("warning"))
                  ),
+
+        # tabPanel("Adjusted Corplot",
+        #                 plotOutput("corrPlotADJUSTED", height = 1500, width = 1500),
+        #                 uiOutput("warning")
+        # ),
+        
         tabPanel("Uploaded Data",
                  dataTableOutput("dataTable")),
         
@@ -95,4 +101,5 @@ shinyUI(fluidPage(
         )
     )
   )
-))
+)
+)
