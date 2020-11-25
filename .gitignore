@@ -1,4 +1,4 @@
 packrat/lib*/
 .Rproj.user
 shinyapps
-$GIT_DIR/rsconnect/
+rsconnect/
